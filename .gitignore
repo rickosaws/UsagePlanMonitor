@@ -1,3 +1,9 @@
+# AWS SAM 
+.aws-sam/
+packaged.yaml
+samconfig.toml
+*.db
+
 # Logs
 logs
 *.log
