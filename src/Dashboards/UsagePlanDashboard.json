@@ -1,0 +1,29 @@
+{
+  "widgets": [
+    {
+      "height": 10,
+      "width": 17,
+      "y": 2,
+      "x": 0,
+      "type": "metric",
+      "properties": {
+        "sparkline": true,
+        "view": "singleValue",
+        "metrics": [],
+        "region": "ap-southeast-2",
+        "title": "Remaining API requests by Key Name"
+      }
+    },
+    {
+      "height": 2,
+      "width": 17,
+      "y": 12,
+      "x": 0,
+      "type": "alarm",
+      "properties": {
+        "title": "API Alarms",
+        "alarms": []
+      }
+    }
+  ]
+}

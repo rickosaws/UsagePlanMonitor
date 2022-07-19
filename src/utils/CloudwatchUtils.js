@@ -11,6 +11,18 @@ module.exports.putMetricData = async (params) => {
   }
 };
 
+module.exports.listMetricByNamespace = async (namespace) => {
+  var params = {
+    Namespace: namespace,
+  };
+  try {
+    const MetricDataResponse = await cloudwatch.listMetrics(params).promise();
+    return MetricDataResponse;
+  } catch (error) {
+    console.info("Unable to retrieve Cloudwatch Metric data:", error);
+  }
+};
+
 module.exports.buildCWMetricRequest = function (CWQuotaMetric) {
   var CWMetricparams = {
     MetricData: [
@@ -29,4 +41,14 @@ module.exports.buildCWMetricRequest = function (CWQuotaMetric) {
     Namespace: CWQuotaMetric.namespace,
   };
   return CWMetricparams;
+};
+
+// API to add or update Cloudwatch Dashboard
+module.exports.putDashboard = async (params) => {
+  try {
+    const MetricDataRespose = await cloudwatch.putDashboard(params).promise();
+    return MetricDataRespose;
+  } catch (error) {
+    console.info("Unable to add Cloudwatch Dashboard :", error);
+  }
 };
