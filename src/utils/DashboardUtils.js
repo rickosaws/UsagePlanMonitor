@@ -1,3 +1,13 @@
+module.exports.GetWidgetData = (widgetType) => {
+  const widgetTypes = {
+    metric: "GetMetricData",
+    alarm: "GetAlarmARN",
+    text: "GetTextData",
+  };
+
+  return widgetTypes[widgetType.toLowerCase()] ?? "Widget Type not found";
+};
+
 module.exports.insertMetricData = async (params) => {
   try {
     const MetricDataRespose = await cloudwatch.putMetricData(params).promise();

@@ -52,3 +52,53 @@ module.exports.putDashboard = async (params) => {
     console.info("Unable to add Cloudwatch Dashboard :", error);
   }
 };
+
+module.exports.tagAlarms = async (alarm) => {
+  var params = {
+    ResourceARN: alarm.alarmARN /* required */,
+    Tags: [
+      /* required */
+      {
+        Key: "ApplicationId" /* required */,
+        Value: process.env.ApplicationId /* required */,
+      },
+      /* more items */
+    ],
+  };
+
+  try {
+    const TagResourceResponse = await cloudwatch.tagResource(params).promise();
+    return TagResourceResponse;
+  } catch (error) {
+    console.info("Unable to tag Cloudwatch Alarm :", error);
+  }
+};
+
+module.exports.getAlarmARNs = async (alarm) => {
+  // var queryparam = {
+  //   query: `MetricAlarms[?contains(Namespace, ${process.env.ApplicationId}) == "true"]`,
+  // };
+
+  // describeAlarms does not require any mandatory parameters, so creating an empty object
+  var params = {};
+  try {
+    const alarmResponse = await cloudwatch.describeAlarms(params).promise();
+
+    var alarmARNS = [];
+    // Iterate through the response adding all the Alarms for the filtered Namespace
+    // TODO: This should only be called ;
+
+    for (alarm of alarmResponse) {
+      console.log("****** Processing", alarmResponse.name + " ******");
+
+      if (`Namespace.${process.env.ApplicationId}` in alarm) {
+        // Create Date Ranges for Quota data
+        alarmARNS.push(alarm.AlarmArn);
+      }
+    }
+
+    return alarmARNS;
+  } catch (error) {
+    console.info("Unable to retrieve Cloudwatch Alarm :", error);
+  }
+};
