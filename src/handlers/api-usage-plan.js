@@ -68,7 +68,7 @@ exports.UsagePlanHandler = async () => {
             console.info(error);
           }
           console.log(
-            "****** Successfully Processed API Key",
+            "******* Successfully Processed API Key",
             keyQuotaData.name + " ******"
           );
         }
