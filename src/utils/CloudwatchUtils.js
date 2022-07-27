@@ -1,6 +1,7 @@
 var AWS = require("aws-sdk");
 AWS.config.update({ region: "ap-southeast-2" /* process.env.REGION*/ });
 var cloudwatch = new AWS.CloudWatch();
+var jmespath = require("jmespath");
 
 module.exports.putMetricData = async (params) => {
   try {
@@ -74,31 +75,26 @@ module.exports.tagAlarms = async (alarm) => {
   }
 };
 
-module.exports.getAlarmARNs = async (alarm) => {
-  // var queryparam = {
-  //   query: `MetricAlarms[?contains(Namespace, ${process.env.ApplicationId}) == "true"]`,
-  // };
-
+module.exports.getAlarmARNs = async (namespace) => {
   // describeAlarms does not require any mandatory parameters, so creating an empty object
   var params = {};
   try {
+    // Grab all the alarms
     const alarmResponse = await cloudwatch.describeAlarms(params).promise();
 
-    var alarmARNS = [];
-    // Iterate through the response adding all the Alarms for the filtered Namespace
-    // TODO: This should only be called ;
-
-    for (alarm of alarmResponse) {
-      console.log("****** Processing", alarmResponse.name + " ******");
-
-      if (`Namespace.${process.env.ApplicationId}` in alarm) {
-        // Create Date Ranges for Quota data
-        alarmARNS.push(alarm.AlarmArn);
-      }
+    // filter the response object returning just those within the filtered NameSpace
+    filteredAlarms = jmespath.search(
+      alarmResponse,
+      `MetricAlarms[?Namespace == '${namespace}']`
+    );
+    var filteredAlarmARNs = [];
+    // Push the AlarnARNs into a new object
+    for (const el of filteredAlarms) {
+      filteredAlarmARNs.push(el.AlarmArn);
     }
-
-    return alarmARNS;
+    return filteredAlarmARNs;
   } catch (error) {
-    console.info("Unable to retrieve Cloudwatch Alarm :", error);
+    console.error();
+    "Unable to retrieve Cloudwatch Alarms :", error;
   }
 };

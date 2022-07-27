@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "jmespath": "^0.16.0",
     "moment-timezone": "^0.5.34"
   },
   "devDependencies": {

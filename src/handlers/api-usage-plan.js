@@ -12,6 +12,12 @@ exports.UsagePlanHandler = async () => {
   // Get all Usage Plans for the Account
   const GetAllUsagePlans = await UsagePlanUtils.getAllUsagePlans({});
 
+  // Grab the Alarms and return a filtered list based on the Cloudwatch Namespace
+  const getthealarmsbro = await CloudWatchUtils.getAlarmARNs(
+    process.env.ApplicationId
+  );
+  console.log("Alarms Array: ", JSON.stringify(getthealarmsbro));
+
   // Check the response object contains a quota array and send a request to GetUsage to obtain quota values
   for (usagePlan of GetAllUsagePlans) {
     console.log("****** Processing", usagePlan.name + " ******");
@@ -61,9 +67,9 @@ exports.UsagePlanHandler = async () => {
             MetricDataRequest =
               CloudWatchUtils.buildCWMetricRequest(CWRequestParams);
             // Send a request to CloudWatch Custom Metric via the PutMetric API
-            MetricDataRespose = await CloudWatchUtils.putMetricData(
-              MetricDataRequest
-            );
+            // MetricDataRespose = await CloudWatchUtils.putMetricData(
+            //   MetricDataRequest
+            // );
           } catch (error) {
             console.info(error);
           }
