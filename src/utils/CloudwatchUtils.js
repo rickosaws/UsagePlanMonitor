@@ -82,7 +82,7 @@ module.exports.getAlarmARNs = async (namespace) => {
     // Grab all the alarms
     const alarmResponse = await cloudwatch.describeAlarms(params).promise();
 
-    // filter the response object returning just those within the filtered NameSpace
+    // filter the response object returning just those in the filtered NameSpace
     filteredAlarms = jmespath.search(
       alarmResponse,
       `MetricAlarms[?Namespace == '${namespace}']`
