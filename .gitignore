@@ -137,3 +137,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Lambda Package files
+*.zip
+
+# Repolinter Rulesets
+amazon-ospo-ruleset.json
+
